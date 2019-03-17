@@ -1,11 +1,11 @@
 
 package com.udacity.gradle.builditbigger;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.AndroidTestCase;
+import android.util.Log;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -14,9 +14,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 
-import java.util.concurrent.TimeUnit;
-
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +24,7 @@ import org.junit.runner.RunWith;
 public class EndpointsAsyncTaskTestUnit extends AndroidTestCase{
     String TAG = EndpointsAsyncTask.class.getSimpleName();
    @Rule
-    public ActivityTestRule<MainActivity> mActivityRule =
+    public ActivityTestRule mActivityRule =
             new ActivityTestRule(MainActivity.class);
 
 
@@ -35,10 +32,19 @@ public class EndpointsAsyncTaskTestUnit extends AndroidTestCase{
    @Test
    public void testJokeIsNotEmpty() throws Exception {
 
-       EndpointsAsyncTaskTest aTest =  new EndpointsAsyncTaskTest();
-       aTest.execute(InstrumentationRegistry.getContext());
-       String joke = aTest.get(5, TimeUnit.SECONDS);
-       Assert.assertTrue(!joke.equals(""));
+       Log.v("NonEmptyStringTest", "Running NonEmptyStringTest test");
+       String joke = null;
+       EndpointsAsyncTask endpointsAsyncTask = new EndpointsAsyncTask();
+       endpointsAsyncTask.execute();
+       try {
+           joke = endpointsAsyncTask.get();
+           Log.d(TAG, "Retrieved a non-empty string successfully: " + joke);
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+       assertNotNull(joke);
+
+
    }
 
     @Test
